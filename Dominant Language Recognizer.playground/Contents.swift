@@ -15,7 +15,6 @@ let textArray = [
                 "Mein Name ist Kushal"
                 ]
 
-
 //Read the CSV file added to Resources folder
 if let fileURL = Bundle.main.url(forResource: "LanguageCodes", withExtension: "csv") {
     do {
@@ -37,7 +36,6 @@ func findDominantLanguage(languageDataframe : DataFrame){
             if let detectedLanguage = detectedLanguageDataFrame.columns[1].first as? String {
                 print("Detected \(detectedLanguage) as dominant language for \n\(text)\n")
             } else {
-                // The value is nil or not a String
                 print("Language code is \(language.rawValue). Could not recognize language for \n\(text)\n")
             }
             
