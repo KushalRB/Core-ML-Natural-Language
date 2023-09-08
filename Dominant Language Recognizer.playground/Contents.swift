@@ -1,6 +1,7 @@
 import NaturalLanguage
 import TabularData
 
+//An array of strings whose dominant language is to be recognized
 let textArray = [
                 "My name is Kushal",
                 "मेरो नाम कुशल हो।",
@@ -14,10 +15,12 @@ let textArray = [
                 "Mein Name ist Kushal"
                 ]
 
+
+//Read the CSV file added to Resources folder
 if let fileURL = Bundle.main.url(forResource: "LanguageCodes", withExtension: "csv") {
     do {
+        //Convert the csv file to dataframe
         let languageDataframe = try DataFrame(contentsOfCSVFile: fileURL)
-        print(languageDataframe)
         findDominantLanguage(languageDataframe: languageDataframe)
     } catch {
         print("Error: \(error)")
@@ -30,11 +33,16 @@ if let fileURL = Bundle.main.url(forResource: "LanguageCodes", withExtension: "c
 func findDominantLanguage(languageDataframe : DataFrame){
     for text in textArray{
         if let language = NLLanguageRecognizer.dominantLanguage(for: text){
-            let detectedLanguage = languageDataframe.filter(on: "CODE", String.self, {$0 == language.rawValue})
-            print(detectedLanguage.columns[1])
-            print("Detected \(language.rawValue) as dominant language for \n\(text)\n")
+            let detectedLanguageDataFrame = languageDataframe.filter(on: "CODE", String.self, {$0 == language.rawValue})
+            if let detectedLanguage = detectedLanguageDataFrame.columns[1].first as? String {
+                print("Detected \(detectedLanguage) as dominant language for \n\(text)\n")
+            } else {
+                // The value is nil or not a String
+                print("Language code is \(language.rawValue). Could not recognize language for \n\(text)\n")
+            }
+            
         }else{
-            print("Could not recognize language for \(text)")
+            print("Could not recognize language for \(text)\n")
         }
     }
 }
